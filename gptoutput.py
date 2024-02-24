@@ -1,12 +1,18 @@
 from openai import OpenAI
 import os
 import re
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Initialize the OpenAI client
 
-client = OpenAI(api_key='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')
+client = OpenAI(api_key=os.environ['API_KEY'])
 
-def read_transcribed_text(file_path='/Users/aummaneni/hackillinois/transcribed_output.txt'):
+def read_transcribed_text():
+    # file_path = "./"
+    dirname = os.path.dirname(__file__)
+    file_path = os.path.join(dirname, 'transcribed_output.txt')
     """Reads the transcribed text from a specified file."""
     with open(file_path, 'r') as file:
         return file.read().strip()
