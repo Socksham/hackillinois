@@ -14,7 +14,6 @@ function activate(context) {
         // Specify the path for the audio file
         // Adjust the path as needed, using workspace folders or a temporary directory
         const audioFilePath = path.join(__dirname, 'recorded_audio.wav');
-
         // Start recording with default settings
         const recording = recorder.record({
             sampleRate: 16000,
@@ -27,11 +26,8 @@ function activate(context) {
         const fileStream = fs.createWriteStream(audioFilePath);
         recording.stream().pipe(fileStream);
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	let start = vscode.commands.registerCommand('extension.startRecording', function () {
         vscode.window.showInformationMessage('Starting audio recording...');
-
         recording.start();
     });
 
