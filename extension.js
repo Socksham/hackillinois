@@ -39,6 +39,7 @@ function activate(context) {
         // Implement your logic for stopping the recording as needed
         setTimeout(() => {
             recording.stop();
+			fileStream.end();
             vscode.window.showInformationMessage(`Recording stopped. Audio saved to ${audioFilePath}`);
         }, 5000);
     });
