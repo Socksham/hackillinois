@@ -1,17 +1,33 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
+const axios = require('axios');
 
 function startRecording() {
 	vscode.window.showInformationMessage('Starting Audio');
-	
+
 }
 
-function stopRecording() {
+async function stopRecording() {
 	vscode.window.showInformationMessage('Stopping Audio');
-	
-}
 
+	const options = {
+		method: 'GET',
+		url: 'https://mashape-community-urban-dictionary.p.rapidapi.com/define',
+		params: { term: 'wat' },
+		headers: {
+			'X-RapidAPI-Key': 'f4d6869ce0mshf4d311faa5eed26p1f9bd7jsn669ab8478190',
+			'X-RapidAPI-Host': 'mashape-community-urban-dictionary.p.rapidapi.com'
+		}
+	};
+
+	try {
+		const response = await axios.request(options);
+		console.log(response.data);
+	} catch (error) {
+		console.error(error);
+	}
+}
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
