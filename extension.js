@@ -1,28 +1,23 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
+const { spawn } = require('child_process');
 const recorder = require('node-record-lpcm16');
 const fs = require('fs');
 const path = require('path');
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
+    console.log('Extension "your-extension-name" is now active!');
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	let disposable = vscode.commands.registerCommand('extension.startRecording', function () {
+    let startRecordingDisposable = vscode.commands.registerCommand('hackillinois.startRecording', function () {
         vscode.window.showInformationMessage('Starting audio recording...');
 
         // Specify the path for the audio file
-        // Adjust the path as needed, using workspace folders or a temporary directory
         const audioFilePath = path.join(__dirname, 'recorded_audio.wav');
 
         // Start recording with default settings
-        const recording = recorder.record({
+        const recordingProcess = recorder.record({
             sampleRate: 16000,
             channels: 1,
             format: 'wav',
@@ -31,26 +26,61 @@ function activate(context) {
         });
 
         const fileStream = fs.createWriteStream(audioFilePath);
-        recording.stream().pipe(fileStream);
+        recordingProcess.stream().pipe(fileStream);
 
-        recording.start();
+        recordingProcess.start();
 
-        // Example: Stop recording after 5 seconds
-        // Implement your logic for stopping the recording as needed
+        // Stop recording after 5 seconds
         setTimeout(() => {
-            recording.stop();
-			fileStream.end();
+            recordingProcess.stop();
+            fileStream.end();
             vscode.window.showInformationMessage(`Recording stopped. Audio saved to ${audioFilePath}`);
         }, 5000);
     });
 
-    context.subscriptions.push(disposable);
+    let transcribeAudioDisposable = vscode.commands.registerCommand('hackillinois.transcribeAudio', function () {
+        vscode.window.showInformationMessage('Transcribing audio...');
+
+        // Path to the Python executable. Use 'python3' if 'python' doesn't work.
+        const pythonExecutable = 'python3';
+
+        // Path to your transcribe.py script
+        const scriptPath = path.join(__dirname, 'transcribe.py');
+
+        // Path to the audio file you want to transcribe
+        const audioFilePath = path.join(__dirname, 'recorded_audio.wav');
+
+        const process = spawn(pythonExecutable, [scriptPath, audioFilePath]);
+
+        let transcription = '';
+
+        process.stdout.on('data', (data) => {
+            transcription += data.toString();
+        });
+
+        process.stderr.on('data', (data) => {
+            console.error(`stderr: ${data}`);
+        });
+
+        process.on('close', (code) => {
+            if (code === 0) {
+                console.log('Transcription complete');
+                vscode.window.showInformationMessage('Transcription complete. Check the console for details.');
+                // Process the transcription as needed
+                console.log(transcription);
+            } else {
+                vscode.window.showErrorMessage('Transcription failed');
+                console.error(`Transcription process exited with code ${code}`);
+            }
+        });
+    });
+
+    context.subscriptions.push(startRecordingDisposable, transcribeAudioDisposable);
 }
 
-// This method is called when your extension is deactivated
 function deactivate() {}
 
 module.exports = {
-	activate,
-	deactivate
-}
+    activate,
+    deactivate
+};

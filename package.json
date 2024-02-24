@@ -14,8 +14,12 @@
   "contributes": {
     "commands": [
       {
-        "command": "extension.startRecording",
+        "command": "hackillinoistartRecording",
         "title": "Start Audio Recording"
+      },
+      {
+        "command": "hackillinois.transcribeAudio",
+        "title": "Transcribe Audio"
       }
     ]
   },
