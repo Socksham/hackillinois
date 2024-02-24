@@ -14,13 +14,14 @@
   "contributes": {
     "commands": [
       {
-        "command": "hackillinoistartRecording",
+        "command": "hackillinois.startRecording",
         "title": "Start Audio Recording"
       },
       {
         "command": "hackillinois.transcribeAudio",
         "title": "Transcribe Audio"
       }
+      
     ]
   },
   "scripts": {
