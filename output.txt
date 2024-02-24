@@ -1,0 +1,4 @@
+import string
+
+for i in range(11):
+    print(string.ascii_lowercase[i])

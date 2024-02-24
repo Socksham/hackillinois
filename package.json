@@ -1,8 +1,8 @@
 {
-  "name": "hackillinois",
+  "name": "gpt4api",
   "displayName": "hackillinois",
-  "description": "",
-  "version": "0.0.1",
+  "description": "This is the README for your extension \"hackillinois\". After writing up a brief description, we recommend including the following sections.",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.86.0"
   },
@@ -20,8 +20,11 @@
       {
         "command": "hackillinois.transcribeAudio",
         "title": "Transcribe Audio"
+      },
+      {
+        "command": "hackillinois.speechToText",
+        "title": "Speech To Text"
       }
-      
     ]
   },
   "scripts": {
@@ -39,6 +42,23 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "node-record-lpcm16": "^1.0.1"
-  }
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "node-record-lpcm16": "^1.0.1",
+    "openai": "^4.28.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Socksham/hackillinois.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Socksham/hackillinois/issues"
+  },
+  "homepage": "https://github.com/Socksham/hackillinois#readme"
 }
