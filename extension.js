@@ -1,7 +1,9 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
-
+const recorder = require('node-record-lpcm16');
+const fs = require('fs');
+const path = require('path');
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 
@@ -12,19 +14,36 @@ function activate(context) {
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "hackillinois" is now active!');
+	let disposable = vscode.commands.registerCommand('extension.startRecording', function () {
+        vscode.window.showInformationMessage('Starting audio recording...');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('hackillinois.helloWorld', function () {
-		// The code you place here will be executed every time your command is executed
+        // Specify the path for the audio file
+        // Adjust the path as needed, using workspace folders or a temporary directory
+        const audioFilePath = path.join(__dirname, 'recorded_audio.wav');
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from hackillinois!');
-	});
+        // Start recording with default settings
+        const recording = recorder.record({
+            sampleRate: 16000,
+            channels: 1,
+            format: 'wav',
+            // Adjust the recorder options based on your OS and installation
+            recorder: 'sox', // 'sox' for Linux/macOS, 'rec' for Windows with SoX installed
+        });
 
-	context.subscriptions.push(disposable);
+        const fileStream = fs.createWriteStream(audioFilePath);
+        recording.stream().pipe(fileStream);
+
+        recording.start();
+
+        // Example: Stop recording after 5 seconds
+        // Implement your logic for stopping the recording as needed
+        setTimeout(() => {
+            recording.stop();
+            vscode.window.showInformationMessage(`Recording stopped. Audio saved to ${audioFilePath}`);
+        }, 5000);
+    });
+
+    context.subscriptions.push(disposable);
 }
 
 // This method is called when your extension is deactivated
