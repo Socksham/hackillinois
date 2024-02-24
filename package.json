@@ -12,6 +12,18 @@
   "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
+    "keybindings": [
+      {
+          "command": "extension.startRecording",
+          "key": "ctrl+shift+a",
+          "mac": "ctrl+shift+a"
+      },
+      {
+        "command": "extension.stopRecording",
+        "key": "ctrl+shift+s",
+        "mac": "ctrl+shift+s"
+    }
+  ],
     "commands": [
       {
         "command": "extension.startRecording",
