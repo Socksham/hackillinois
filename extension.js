@@ -11,12 +11,6 @@ const path = require('path');
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	let disposable = vscode.commands.registerCommand('extension.startRecording', function () {
-        vscode.window.showInformationMessage('Starting audio recording...');
-
         // Specify the path for the audio file
         // Adjust the path as needed, using workspace folders or a temporary directory
         const audioFilePath = path.join(__dirname, 'recorded_audio.wav');
@@ -33,18 +27,22 @@ function activate(context) {
         const fileStream = fs.createWriteStream(audioFilePath);
         recording.stream().pipe(fileStream);
 
-        recording.start();
+	// Use the console to output diagnostic information (console.log) and errors (console.error)
+	// This line of code will only be executed once when your extension is activated
+	let start = vscode.commands.registerCommand('extension.startRecording', function () {
+        vscode.window.showInformationMessage('Starting audio recording...');
 
-        // Example: Stop recording after 5 seconds
-        // Implement your logic for stopping the recording as needed
-        setTimeout(() => {
-            recording.stop();
-			fileStream.end();
-            vscode.window.showInformationMessage(`Recording stopped. Audio saved to ${audioFilePath}`);
-        }, 5000);
+        recording.start();
     });
 
-    context.subscriptions.push(disposable);
+    let stop = vscode.commands.registerCommand('extension.stopRecording', function () {
+        vscode.window.showInformationMessage('Stopping Audio');
+        recording.stop();
+        fileStream.end();
+        vscode.window.showInformationMessage(`Recording stopped. Audio saved to ${audioFilePath}`);
+    });
+
+    context.subscriptions.push(start, stop);
 }
 
 // This method is called when your extension is deactivated

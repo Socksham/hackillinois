@@ -16,6 +16,10 @@
       {
         "command": "extension.startRecording",
         "title": "Start Audio Recording"
+      },
+      {
+        "command": "extension.stopRecording",
+        "title": "Stop Audio Recording"
       }
     ]
   },
