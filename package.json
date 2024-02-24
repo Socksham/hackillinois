@@ -12,10 +12,16 @@
   "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
-    "commands": [{
-      "command": "hackillinois.helloWorld",
-      "title": "Hello World"
-    }]
+    "commands": [
+      {
+        "command": "hackillinois.start",
+        "title": "Start"
+      },
+      {
+        "command": "hackillinois.stop",
+        "title": "Stop"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",
@@ -23,12 +29,15 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.86.0",
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
-    "eslint": "^8.56.0",
-    "typescript": "^5.3.3",
+    "@types/vscode": "^1.86.0",
     "@vscode/test-cli": "^0.0.6",
-    "@vscode/test-electron": "^2.3.9"
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "axios": "^1.6.7"
   }
 }
