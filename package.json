@@ -14,14 +14,6 @@
   "contributes": {
     "commands": [
       {
-        "command": "hackillinois.startRecording",
-        "title": "Start Audio Recording"
-      },
-      {
-        "command": "hackillinois.transcribeAudio",
-        "title": "Transcribe Audio"
-      },
-      {
         "command": "hackillinois.speechToText",
         "title": "Speech To Text"
       }

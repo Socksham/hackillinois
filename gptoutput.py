@@ -7,7 +7,7 @@ load_dotenv()
 
 # Initialize the OpenAI client
 
-client = OpenAI(api_key=os.environ['API_KEY'])
+client = OpenAI(api_key=os.getenv("API_KEY"))
 
 def read_transcribed_text():
     # file_path = "./"
@@ -33,7 +33,9 @@ def call_api_and_save_output(user_input):
     cleaned_output_code = re.sub(r'```$', '', cleaned_output_code)
 
     # Define the path to the output file (adjust the path as necessary)
-    output_file_path = '/Users/aummaneni/hackillinois/output.txt'
+    dirname = os.path.dirname(__file__)
+    output_file_path = os.path.join(dirname, 'output.txt')
+    # output_file_path = '/Users/aummaneni/hackillinois/'
 
     # Open the file in append mode and write the output
     with open(output_file_path, 'w') as file:
