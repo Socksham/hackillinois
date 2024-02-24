@@ -2,10 +2,19 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 const axios = require('axios');
+const OpenAI = require('openai')
+
+const API_KEY = "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";
+
+const openai = new OpenAI({
+	apiKey: API_KEY,
+});
+
 
 function startRecording() {
 	vscode.window.showInformationMessage('Starting Audio');
 
+	analyzeText();
 }
 
 async function stopRecording() {
@@ -30,7 +39,22 @@ async function stopRecording() {
 }
 
 async function analyzeText() {
-	
+	const response = await openai.chat.completions.create({
+		model: "gpt-3.5-turbo",
+		messages: [
+			{
+				"role": "user",
+				"content": "who is einstein"
+			}
+		],
+		temperature: 1,
+		max_tokens: 256,
+		top_p: 1,
+		frequency_penalty: 0,
+		presence_penalty: 0,
+	});
+
+	console.log(response)
 }
 
 // This method is called when your extension is activated
