@@ -49,7 +49,7 @@ function activate(context) {
 
 async function transcribeAndGenerateCode(audioFilePath) {
     // Path to the Python executable and transcription script
-    const pythonExecutable = '/usr/local/bin/python'; // Use 'python3' if 'python' doesn't work for your setup
+    const pythonExecutable = '/usr/local/bin/python3'; // Use 'python3' if 'python' doesn't work for your setup
     const transcriptionScriptPath = path.join(__dirname, 'transcribe.py');
 
     vscode.window.showInformationMessage('Starting transcription...');
@@ -89,7 +89,7 @@ async function transcribeAndGenerateCode(audioFilePath) {
 }
 
 async function runGptOutputScript() {
-    const pythonExec = '/usr/local/bin/python'; // Adjust as needed
+    const pythonExec = '/usr/local/bin/python3'; // Adjust as needed
     const pyPath = path.join(__dirname, 'gptoutput.py'); // Ensure this is correct
 
     const gptProcess = spawn(pythonExec, [pyPath]);

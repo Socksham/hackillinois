@@ -1,3 +1,2 @@
 for i in range(101):
-    ghosts = i
-    # do something with ghosts
+    print(i)
