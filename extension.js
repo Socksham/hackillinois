@@ -21,8 +21,8 @@ async function insertCodeAtCursor(code) {
 	});
 
 	// Move the cursor to the end of the inserted code
-	const newPosition = position.with(position.line, position.character + code.length);
-	editor.selection = new vscode.Selection(newPosition, newPosition);
+	const newPosition = position.with(position.line + code.split('\n').length - 1, code.length);
+    editor.selection = new vscode.Selection(newPosition, newPosition);
 }
 
 /**

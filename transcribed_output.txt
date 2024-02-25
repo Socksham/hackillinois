@@ -1,3 +1,1 @@
-starting
-loaded model
- Why a Lou Frindred that prints out McDonald's?
+ Make a linked list class that implements all the help functions I need and make comments for each of those functions.
