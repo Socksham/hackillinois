@@ -55,21 +55,27 @@ function activate(context) {
         recordingProcess.stop();
         fileStream.end();
         vscode.window.showInformationMessage(`Recording stopped. Audio saved to ${audioFilePath}`);
-        await transcribeAndGenerateCode(audioFilePath);
+        const activeEditor = vscode.window.activeTextEditor;
+        let languageId = 'plaintext'; // Default to plaintext if no editor is open
+        if (activeEditor) {
+            languageId = activeEditor.document.languageId;
+        }
+
+        await transcribeAndGenerateCode(audioFilePath, languageId);
     });
 
     context.subscriptions.push(startAudioRecording,stopAudioRecordingAndTranscribe );
 }
 
-async function transcribeAndGenerateCode(audioFilePath) {
+async function transcribeAndGenerateCode(audioFilePath, languageId) {
     // Path to the Python executable and transcription script
-    const pythonExecutable = '/usr/local/bin/python3'; // Use 'python3' if 'python' doesn't work for your setup
+    const pythonExecutable = '/opt/homebrew/bin/python3'; // Use 'python3' if 'python' doesn't work for your setup
     const transcriptionScriptPath = path.join(__dirname, 'transcribe.py');
 
     vscode.window.showInformationMessage('Starting transcription...');
 
     // Execute the transcription script with the audio file path
-    const transcribeProcess = spawn(pythonExecutable, [transcriptionScriptPath, audioFilePath]);
+    const transcribeProcess = spawn(pythonExecutable, [transcriptionScriptPath, audioFilePath, languageId]);
 
     vscode.window.showInformationMessage(transcribeProcess.pid);
 
@@ -99,14 +105,14 @@ async function transcribeAndGenerateCode(audioFilePath) {
     });
 
     // Now run the gptoutput.py script to generate code from the transcription
-    await runGptOutputScript();
+    await runGptOutputScript(languageId);
 }
 
-async function runGptOutputScript() {
-    const pythonExec = '/usr/local/bin/python3'; // Adjust as needed
+async function runGptOutputScript(languageId) {
+    const pythonExec = '/opt/homebrew/bin/python3'; // Adjust as needed
     const pyPath = path.join(__dirname, 'gptoutput.py'); // Ensure this is correct
 
-    const gptProcess = spawn(pythonExec, [pyPath]);
+    const gptProcess = spawn(pythonExec, [pyPath, languageId]);
 
     let generatedCode = ``;
 	// insertCodeAtCursor(generatedCode);

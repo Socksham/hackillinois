@@ -8,6 +8,5 @@ def transcribe_audio(audio_path):
     print(result['text'])
 
 if __name__ == "__main__":
-    import sys
     audio_path = sys.argv[1]
     transcribe_audio(audio_path)
