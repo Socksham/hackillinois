@@ -1,1 +1,3 @@
- So basically like we'll send something here that says audio message and not convert something. If it runs into error. Yeah. It's getting environment file working so that. The dot end. Yeah we can all.
+starting
+loaded model
+ Make a little bit of ghosts from 0 to 100.

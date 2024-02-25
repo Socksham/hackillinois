@@ -7,7 +7,11 @@ load_dotenv()
 
 # Initialize the OpenAI client
 
-client = OpenAI(api_key=os.getenv("API_KEY"))
+API_KEY = os.getenv("API_KEY")
+
+print(API_KEY)
+
+client = OpenAI(api_key="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")
 
 def read_transcribed_text():
     # file_path = "./"
@@ -20,7 +24,7 @@ def read_transcribed_text():
 # Function to call the API and save the output to a file
 def call_api_and_save_output(user_input):
     completion = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo-0125",
         messages=[
             {"role": "system", "content": "You are an advanced AI programming assistant designed to interpret spoken language descriptions of code and translate them into syntactically correct programming code. Your expertise includes identifying and transforming verbal descriptions of programming constructs, such as loops, conditionals, variable assignments, and arithmetic operations, into executable code in a variety of programming languages. You prioritize translating spoken language that describes code structures and logic, ensuring the generated code is accurate and functional. You also understand and process general spoken instructions about programming tasks, converting them into code. Return nothing but the code itself, output 'err' if there is no code-based language."},
             {"role": "user", "content": user_input}
