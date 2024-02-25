@@ -108,10 +108,12 @@ async function runGptOutputScript() {
 
     const gptProcess = spawn(pythonExec, [pyPath]);
 
-    let code = ""
+    let generatedCode = ``;
+	// insertCodeAtCursor(generatedCode);
 
     gptProcess.stdout.on('data', (data) => {
-        code += data.toString();
+        generatedCode += data;
+        // code += data.toString();
     });
 
     gptProcess.stderr.on('data', (data) => {
@@ -122,7 +124,7 @@ async function runGptOutputScript() {
         gptProcess.on('close', (code) => {
             if (code === 0) {
                 vscode.window.showInformationMessage('GPT output script completed successfully.');
-                insertCodeAtCursor(code);
+                insertCodeAtCursor(generatedCode);
                 resolve();
             } else {
                 vscode.window.showErrorMessage('GPT output script failed.');

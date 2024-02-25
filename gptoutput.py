@@ -9,7 +9,7 @@ load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
 
-print(API_KEY)
+# print(API_KEY)
 
 client = OpenAI(api_key=API_KEY)
 
@@ -45,7 +45,7 @@ def call_api_and_save_output(user_input):
     with open(output_file_path, 'w') as file:
         file.write(str(cleaned_output_code))  # Add a newline for readability between entries
 
-    print("Output saved to", output_file_path)
+    print(cleaned_output_code)
     return cleaned_output_code
 
 
