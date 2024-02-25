@@ -1,9 +1,11 @@
-#include <iostream>
+#include "functions.hpp"
 
-int main() {
-    std::vector<int> numbers = {5, 10, 3, 8, 15};
-    int result = findLargestVariable(numbers);
-    std::cout << "The largest variable in the vector is: " << result << std::endl;
-
-    return 0;
+int MaxElement(int arr[], unsigned int size) {
+    int max_EL = arr[0];
+    for (unsigned int i = 0; i < size; ++i) {
+        if (max_EL < arr[i]) {
+            max_EL = arr[i];
+        }
+    }
+    return max_EL;
 }

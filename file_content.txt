@@ -1,17 +1,85 @@
+#include "functions.hpp"
 
-int findLargestVariable(const std::vector<int>& vec) {
-    if(vec.empty()) {
-        // Handle empty vector
-        return -1;
-    }
 
-    int max = vec[0];
-    for(int i = 1; i < vec.size(); ++i) {
-        if(vec[i] > max) {
-            max = vec[i];
-        }
-    }
-
-    return max;
+int MaxElement(int arr[], unsigned int size) {
+  Í
 }
-#include <iostream>
+
+
+bool SumFinder(int arr[], unsigned int size, int k) {
+  
+}
+
+
+
+
+
+// Write a function that reverses an array
+// Time: 10 - 15 minutes
+void ReverseArray(int arr[], unsigned int size) {
+  int temp = 0, i = 0;
+  for (i = 0; i < size / 2; ++i) {
+    temp = arr[size - i - 1];
+    arr[size - i - 1] = arr[i];
+    arr[i] = temp;
+  }
+}
+
+//-------------- Challenge Problems Below --------------------
+
+// Write a function that takes in two sorted arrays, arr1 and arr2,
+// and merges them into a third sorted arr3. Note arr3 is the size of arr1 +
+// arr2
+// Time: 30 - 40 minutes
+void MergeArrays(int arr1[],
+                 unsigned int size1,
+                 int arr2[],
+                 unsigned int size2,
+                 int arr3[]) {
+  unsigned int i = 0;
+  unsigned int j = 0;
+  unsigned int k = 0;
+  while (i < size1 && j < size2) {
+    // Compare the current elements of arr1 and arr2
+    // and insert the smaller one into arr3
+    if (arr1[i] < arr2[j]) {
+      arr3[k] = arr1[i];
+      i++;  // increment the pointer for arr1
+    } else {
+      arr3[k] = arr2[j];
+      j++;  // increment the pointer for arr2
+    }
+    k++;  // increment the pointer for arr3
+  }
+
+  // Copy the remaining elements of arr1 or arr2 into arr3
+  // Note: only one of these loops will execute
+  while (i < size1) {
+    arr3[k] = arr1[i];
+    i++;
+    k++;
+  }
+  while (j < size2) {
+    arr3[k] = arr2[j];
+    j++;
+    k++;
+  }
+}
+// Write a function that removes duplicate elements from an
+// array. Make sure the passed in size also gets updated based
+// on many elements you had to remove.
+// Suggested Time: 30 - 40 minutes
+void RemoveDuplicates(int arr[], int& size) {}
+
+// Write a function that rotates an array to the right num_rotations
+// number of times.
+// Suggested Time: 30 - 40 minutes
+void RotateArray(int arr[], unsigned int size, unsigned int num_rotations) {}
+
+// Write a function that rotates an array to the right num_rotations
+// but this time you may not use another data structure, like an array,
+// vector, or map.
+// Suggested Time: 30 - 40 minutes
+void RotateArrayInPlace(int arr[],
+                        unsigned int size,
+                        unsigned int num_rotations) {}
