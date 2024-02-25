@@ -1,3 +1,1 @@
-starting
-loaded model
- Why a Lou Frindred that prints out McDonald's?
+ Call the function in this file using any number of your choice to test its output.
