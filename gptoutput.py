@@ -11,7 +11,7 @@ API_KEY = os.getenv("API_KEY")
 
 print(API_KEY)
 
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="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")
 
 def read_transcribed_text():
     # file_path = "./"

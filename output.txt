@@ -1,3 +1,3 @@
-for i in range(101):
-    ghosts = i
-    # do something with ghosts
+for i in range(1, 101):
+    # code here
+
