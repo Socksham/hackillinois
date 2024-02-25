@@ -1,3 +1,3 @@
 starting
 loaded model
- Print a statement in Python for me.
+ Why a Lou Frindred that prints out McDonald's?

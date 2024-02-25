@@ -12,10 +12,26 @@
   "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
+    "keybindings": [
+      {
+          "command": "hackillinois.startRecording",
+          "key": "ctrl+shift+a",
+          "mac": "ctrl+shift+a"
+      },
+      {
+        "command": "hackillinois.stopRecording",
+        "key": "ctrl+shift+s",
+        "mac": "ctrl+shift+s"
+    }
+  ],
     "commands": [
       {
-        "command": "hackillinois.speechToText",
-        "title": "Speech To Text"
+        "command": "hackillinois.startRecording",
+        "title": "Start Audio Recording"
+      },
+      {
+        "command": "hackillinois.stopRecording",
+        "title": "Stop Audio Recording"
       }
     ]
   },

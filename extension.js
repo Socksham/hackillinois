@@ -4,52 +4,66 @@ const recorder = require('node-record-lpcm16');
 const fs = require('fs');
 const path = require('path');
 
+async function insertCodeAtCursor(code) {
+	// Get the active text editor
+	const editor = vscode.window.activeTextEditor;
+	if (!editor) {
+		vscode.window.showErrorMessage("No active text editor.");
+		return;
+	}
+
+	// Get the current cursor position
+	const position = editor.selection.active;
+
+	// Insert the code at the cursor position
+	await editor.edit(editBuilder => {
+		editBuilder.insert(position, code);
+	});
+
+	// Move the cursor to the end of the inserted code
+	const newPosition = position.with(position.line, position.character + code.length);
+	editor.selection = new vscode.Selection(newPosition, newPosition);
+}
+
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
     console.log('Extension "your-extension-name" is now active!');
 
-    let combinedRecordingTranscribingDisposable = vscode.commands.registerCommand('hackillinois.speechToText', async function () {
+    // Specify the path for the audio file
+    const audioFilePath = path.join(__dirname, 'recorded_audio.wav');
+
+    // Start recording with default settings
+    const recordingProcess = recorder.record({
+        sampleRate: 16000,
+        channels: 1,
+        format: 'wav',
+        recorder: 'sox', // Adjust based on your OS and installation
+    });
+
+    const fileStream = fs.createWriteStream(audioFilePath);
+    recordingProcess.stream().pipe(fileStream);
+
+    let startAudioRecording = vscode.commands.registerCommand('hackillinois.startRecording', async function () {
         vscode.window.showInformationMessage('Starting audio recording...');
 
-        // Specify the path for the audio file
-        const audioFilePath = path.join(__dirname, 'recorded_audio.wav');
-
-        // Start recording with default settings
-        const recordingProcess = recorder.record({
-            sampleRate: 16000,
-            channels: 1,
-            format: 'wav',
-            recorder: 'sox', // Adjust based on your OS and installation
-        });
-
-        const fileStream = fs.createWriteStream(audioFilePath);
-        recordingProcess.stream().pipe(fileStream);
-
         recordingProcess.start();
+    });
 
-        // Define the duration of the recording in milliseconds
-        const recordingDurationMs = 10000; // 10 seconds
-
-        // Wait for the recording to finish
-        await new Promise(resolve => setTimeout(() => {
-            recordingProcess.stop();
-            fileStream.end();
-            vscode.window.showInformationMessage(`Recording stopped. Audio saved to ${audioFilePath}`);
-            resolve();
-        }, recordingDurationMs));
-
-        // Proceed with transcribing the audio and generating code
+    let stopAudioRecordingAndTranscribe = vscode.commands.registerCommand('hackillinois.stopRecording', async function () {
+        recordingProcess.stop();
+        fileStream.end();
+        vscode.window.showInformationMessage(`Recording stopped. Audio saved to ${audioFilePath}`);
         await transcribeAndGenerateCode(audioFilePath);
     });
 
-    context.subscriptions.push(combinedRecordingTranscribingDisposable);
+    context.subscriptions.push(startAudioRecording,stopAudioRecordingAndTranscribe );
 }
 
 async function transcribeAndGenerateCode(audioFilePath) {
     // Path to the Python executable and transcription script
-    const pythonExecutable = '/usr/local/bin/python'; // Use 'python3' if 'python' doesn't work for your setup
+    const pythonExecutable = '/usr/local/bin/python3'; // Use 'python3' if 'python' doesn't work for your setup
     const transcriptionScriptPath = path.join(__dirname, 'transcribe.py');
 
     vscode.window.showInformationMessage('Starting transcription...');
@@ -89,13 +103,17 @@ async function transcribeAndGenerateCode(audioFilePath) {
 }
 
 async function runGptOutputScript() {
-    const pythonExec = '/usr/local/bin/python'; // Adjust as needed
+    const pythonExec = '/usr/local/bin/python3'; // Adjust as needed
     const pyPath = path.join(__dirname, 'gptoutput.py'); // Ensure this is correct
 
     const gptProcess = spawn(pythonExec, [pyPath]);
 
+    let generatedCode = ``;
+	// insertCodeAtCursor(generatedCode);
+
     gptProcess.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
+        generatedCode += data;
+        // code += data.toString();
     });
 
     gptProcess.stderr.on('data', (data) => {
@@ -106,6 +124,7 @@ async function runGptOutputScript() {
         gptProcess.on('close', (code) => {
             if (code === 0) {
                 vscode.window.showInformationMessage('GPT output script completed successfully.');
+                insertCodeAtCursor(generatedCode);
                 resolve();
             } else {
                 vscode.window.showErrorMessage('GPT output script failed.');
