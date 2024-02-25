@@ -10,41 +10,34 @@ const path = require('path');
 function activate(context) {
     console.log('Extension "your-extension-name" is now active!');
 
-    let combinedRecordingTranscribingDisposable = vscode.commands.registerCommand('hackillinois.speechToText', async function () {
+    // Specify the path for the audio file
+    const audioFilePath = path.join(__dirname, 'recorded_audio.wav');
+
+    // Start recording with default settings
+    const recordingProcess = recorder.record({
+        sampleRate: 16000,
+        channels: 1,
+        format: 'wav',
+        recorder: 'sox', // Adjust based on your OS and installation
+    });
+
+    const fileStream = fs.createWriteStream(audioFilePath);
+    recordingProcess.stream().pipe(fileStream);
+
+    let startAudioRecording = vscode.commands.registerCommand('hackillinois.startRecording', async function () {
         vscode.window.showInformationMessage('Starting audio recording...');
 
-        // Specify the path for the audio file
-        const audioFilePath = path.join(__dirname, 'recorded_audio.wav');
-
-        // Start recording with default settings
-        const recordingProcess = recorder.record({
-            sampleRate: 16000,
-            channels: 1,
-            format: 'wav',
-            recorder: 'sox', // Adjust based on your OS and installation
-        });
-
-        const fileStream = fs.createWriteStream(audioFilePath);
-        recordingProcess.stream().pipe(fileStream);
-
         recordingProcess.start();
+    });
 
-        // Define the duration of the recording in milliseconds
-        const recordingDurationMs = 10000; // 10 seconds
-
-        // Wait for the recording to finish
-        await new Promise(resolve => setTimeout(() => {
-            recordingProcess.stop();
-            fileStream.end();
-            vscode.window.showInformationMessage(`Recording stopped. Audio saved to ${audioFilePath}`);
-            resolve();
-        }, recordingDurationMs));
-
-        // Proceed with transcribing the audio and generating code
+    let stopAudioRecordingAndTranscribe = vscode.commands.registerCommand('hackillinois.stopRecording', async function () {
+        recordingProcess.stop();
+        fileStream.end();
+        vscode.window.showInformationMessage(`Recording stopped. Audio saved to ${audioFilePath}`);
         await transcribeAndGenerateCode(audioFilePath);
     });
 
-    context.subscriptions.push(combinedRecordingTranscribingDisposable);
+    context.subscriptions.push(startAudioRecording,stopAudioRecordingAndTranscribe );
 }
 
 async function transcribeAndGenerateCode(audioFilePath) {
