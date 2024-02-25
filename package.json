@@ -22,10 +22,6 @@
       {
         "command": "hackillinois.stop",
         "title": "Stop"
-      },
-      {
-        "command": "hackillinois.timer",
-        "title": "Start Timer"
       }
     ]
   },
