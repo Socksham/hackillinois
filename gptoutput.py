@@ -46,6 +46,8 @@ def call_api_and_save_output(user_input):
         file.write(str(cleaned_output_code))  # Add a newline for readability between entries
 
     print("Output saved to", output_file_path)
+    return cleaned_output_code
+
 
 # Example usage
 if __name__ == "__main__":

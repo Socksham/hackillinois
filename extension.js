@@ -4,6 +4,27 @@ const recorder = require('node-record-lpcm16');
 const fs = require('fs');
 const path = require('path');
 
+async function insertCodeAtCursor(code) {
+	// Get the active text editor
+	const editor = vscode.window.activeTextEditor;
+	if (!editor) {
+		vscode.window.showErrorMessage("No active text editor.");
+		return;
+	}
+
+	// Get the current cursor position
+	const position = editor.selection.active;
+
+	// Insert the code at the cursor position
+	await editor.edit(editBuilder => {
+		editBuilder.insert(position, code);
+	});
+
+	// Move the cursor to the end of the inserted code
+	const newPosition = position.with(position.line, position.character + code.length);
+	editor.selection = new vscode.Selection(newPosition, newPosition);
+}
+
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -87,8 +108,10 @@ async function runGptOutputScript() {
 
     const gptProcess = spawn(pythonExec, [pyPath]);
 
+    let code = ""
+
     gptProcess.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
+        code += data.toString();
     });
 
     gptProcess.stderr.on('data', (data) => {
@@ -99,6 +122,7 @@ async function runGptOutputScript() {
         gptProcess.on('close', (code) => {
             if (code === 0) {
                 vscode.window.showInformationMessage('GPT output script completed successfully.');
+                insertCodeAtCursor(code);
                 resolve();
             } else {
                 vscode.window.showErrorMessage('GPT output script failed.');
