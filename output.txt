@@ -1,9 +1,3 @@
-#include <iostream>
-
-int main() {
-    std::vector<int> numbers = {5, 10, 3, 8, 15};
-    int result = findLargestVariable(numbers);
-    std::cout << "The largest variable in the vector is: " << result << std::endl;
-
-    return 0;
+for (int i = 0; i < 10; i++) {
+    std::cout << "turtles" << std::endl;
 }

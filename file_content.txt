@@ -1,17 +1,10 @@
-
-int findLargestVariable(const std::vector<int>& vec) {
-    if(vec.empty()) {
-        // Handle empty vector
-        return -1;
-    }
-
-    int max = vec[0];
-    for(int i = 1; i < vec.size(); ++i) {
-        if(vec[i] > max) {
-            max = vec[i];
+int findMaxElement(int r[], unsigned int size) {
+    int max_el = r[0];
+    for (unsigned int i = 0; i < size; i++) {
+        if (max_el < r[i]) {
+            max_el = r[i];
         }
     }
-
-    return max;
+    return max_el;
 }
-#include <iostream>
+

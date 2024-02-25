@@ -1,1 +1,1 @@
- Call the function in this file using any number of your choice to test its output.
+ write a 1ft print out turtles like ten times

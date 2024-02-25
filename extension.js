@@ -23,6 +23,7 @@ async function insertCodeAtCursor(code) {
 	// Move the cursor to the end of the inserted code
 	const newPosition = position.with(position.line + code.split('\n').length - 1, code.length);
     editor.selection = new vscode.Selection(newPosition, newPosition);
+    vscode.window.showInformationMessage('WAV is done!');
 }
 
 /**
@@ -36,7 +37,7 @@ function activate(context) {
     
     audioFilePath = "";
     let startAudioRecording = vscode.commands.registerCommand('hackillinois.startRecording', async function () {
-        vscode.window.showInformationMessage('Starting audio recording...');
+        vscode.window.showInformationMessage('WAV is listening...');
 
     audioFilePath = path.join(__dirname, 'recorded_audio.wav');
     
@@ -44,9 +45,9 @@ function activate(context) {
         
         try {
             fs.unlinkSync(audioFilePath);
-            vscode.window.showInformationMessage('Previous recording deleted.');
+            // vscode.window.showInformationMessage('Previous recording deleted.');
         } catch (err) {
-            vscode.window.showErrorMessage('Failed to delete previous recording.');
+            // vscode.window.showErrorMessage('Failed to delete previous recording.');
             console.error(err);
             return; // Exit if unable to delete the file
         }
@@ -68,7 +69,7 @@ function activate(context) {
 
         recordingProcess.stop();
         fileStream.end();
-        vscode.window.showInformationMessage(`Recording stopped. Audio saved to ${audioFilePath}`);
+        // vscode.window.showInformationMessage(`Recording stopped. Audio saved to ${audioFilePath}`);
         activeEditor = vscode.window.activeTextEditor;
         let fileContent = '';
     
@@ -99,7 +100,7 @@ async function transcribeAndGenerateCode(audioFilePath, languageId, fileContent)
     const pythonExecutable = '/opt/homebrew/bin/python3'; // Use 'python3' if 'python' doesn't work for your setup
     const transcriptionScriptPath = path.join(__dirname, 'transcribe.py');
 
-    vscode.window.showInformationMessage('Starting transcription...');
+    vscode.window.showInformationMessage('WAV is thinking...');
 
     // Execute the transcription script with the audio file path
     const transcribeProcess = spawn(pythonExecutable, [transcriptionScriptPath, audioFilePath, languageId, fileContentPath]);
@@ -120,12 +121,12 @@ async function transcribeAndGenerateCode(audioFilePath, languageId, fileContent)
         transcribeProcess.on('close', (code) => {
             if (code === 0) {
                 console.log("got here")
-                vscode.window.showInformationMessage('Transcription complete. Now generating code...');
+                vscode.window.showInformationMessage('WAV is coding...');
                 const outputFile = path.join(__dirname, 'transcribed_output.txt');
                 fs.writeFileSync(outputFile, transcription); // Save transcription
                 resolve();
             } else {
-                vscode.window.showErrorMessage('Transcription failed');
+                vscode.window.showErrorMessage('WAV hit some rough tides');
                 reject(new Error('Transcription process failed'));
             }
         });
@@ -156,11 +157,11 @@ async function runGptOutputScript(languageId) {
     await new Promise((resolve, reject) => {
         gptProcess.on('close', (code) => {
             if (code === 0) {
-                vscode.window.showInformationMessage('GPT output script completed successfully.');
+                // vscode.window.showInformationMessage('GPT output script completed successfully.');
                 insertCodeAtCursor(generatedCode);
                 resolve();
             } else {
-                vscode.window.showErrorMessage('GPT output script failed.');
+                // vscode.window.showErrorMessage('GPT output script failed.');
                 reject(new Error('GPT output script failed'));
             }
         });
@@ -173,3 +174,165 @@ module.exports = {
     activate,
     deactivate
 };
+
+// const vscode = require('vscode');
+// const { spawn } = require('child_process');
+// const recorder = require('node-record-lpcm16');
+// const fs = require('fs');
+// const path = require('path');
+
+// let activeMessageTimeout;
+
+// async function insertCodeAtCursor(code) {
+//     const editor = vscode.window.activeTextEditor;
+//     if (!editor) {
+//         vscode.window.showErrorMessage("No active text editor.");
+//         return;
+//     }
+
+//     const position = editor.selection.active;
+
+//     await editor.edit(editBuilder => {
+//         editBuilder.insert(position, code);
+//     });
+
+//     const newPosition = position.with(position.line + code.split('\n').length - 1, code.length);
+//     editor.selection = new vscode.Selection(newPosition, newPosition);
+// }
+
+// function showMessage(message) {
+//     clearTimeout(activeMessageTimeout);
+//     vscode.window.setStatusBarMessage(message);
+//     activeMessageTimeout = setTimeout(() => {
+//         vscode.window.setStatusBarMessage('');
+//     }, 15000);
+// }
+
+// function activate(context) {
+//     console.log('Extension "your-extension-name" is now active!');
+
+//     let audioFilePath = "";
+
+//     let startAudioRecording = vscode.commands.registerCommand('hackillinois.startRecording', async function () {
+//         showMessage('WAV is listening...');
+
+//         audioFilePath = path.join(__dirname, 'recorded_audio.wav');
+
+//         if (fs.existsSync(audioFilePath)) {
+//             try {
+//                 fs.unlinkSync(audioFilePath);
+//             } catch (err) {
+//                 console.error(err);
+//                 return;
+//             }
+//         }
+
+//         fileStream = fs.createWriteStream(audioFilePath);
+//         recordingProcess = recorder.record({
+//             sampleRate: 16000,
+//             channels: 1,
+//             format: 'wav',
+//             recorder: 'sox',
+//         });
+
+//         recordingProcess.stream().pipe(fileStream);
+//         recordingProcess.start();
+//     });
+
+//     let stopAudioRecordingAndTranscribe = vscode.commands.registerCommand('hackillinois.stopRecording', async function () {
+//         showMessage('WAV is thinking...');
+
+//         recordingProcess.stop();
+//         fileStream.end();
+
+//         activeEditor = vscode.window.activeTextEditor;
+//         let fileContent = '';
+
+//         if (activeEditor) {
+//             fileContent = activeEditor.document.getText();
+//         }
+//         let languageId = 'plaintext';
+//         if (activeEditor) {
+//             languageId = activeEditor.document.languageId;
+//         }
+
+//         await transcribeAndGenerateCode(audioFilePath, languageId, fileContent);
+//     });
+
+//     context.subscriptions.push(startAudioRecording, stopAudioRecordingAndTranscribe);
+// }
+
+// async function transcribeAndGenerateCode(audioFilePath, languageId, fileContent) {
+//     const fileContentPath = path.join(__dirname, 'file_content.txt');
+//     await fs.promises.writeFile(fileContentPath, fileContent);
+
+//     const pythonExecutable = '/opt/homebrew/bin/python3';
+//     const transcriptionScriptPath = path.join(__dirname, 'transcribe.py');
+
+//     showMessage('WAV is thinking...');
+
+//     const transcribeProcess = spawn(pythonExecutable, [transcriptionScriptPath, audioFilePath, languageId, fileContentPath]);
+
+//     let transcription = '';
+
+//     transcribeProcess.stdout.on('data', (data) => {
+//         transcription += data.toString();
+//     });
+
+//     transcribeProcess.stderr.on('data', (data) => {
+//         console.error(`stderr: ${data}`);
+//     });
+
+//     await new Promise((resolve, reject) => {
+//         transcribeProcess.on('close', (code) => {
+//             if (code === 0) {
+//                 showMessage('WAV is coding...');
+//                 const outputFile = path.join(__dirname, 'transcribed_output.txt');
+//                 fs.writeFileSync(outputFile, transcription);
+//                 resolve();
+//             } else {
+//                 vscode.window.showErrorMessage('WAV encountered errors');
+//                 reject(new Error('Transcription process failed'));
+//             }
+//         });
+//     });
+
+//     await runGptOutputScript(languageId);
+// }
+
+// async function runGptOutputScript(languageId) {
+//     const pythonExec = '/opt/homebrew/bin/python3';
+//     const pyPath = path.join(__dirname, 'gptoutput.py');
+
+//     const gptProcess = spawn(pythonExec, [pyPath, languageId]);
+
+//     let generatedCode = '';
+
+//     gptProcess.stdout.on('data', (data) => {
+//         generatedCode += data;
+//     });
+
+//     gptProcess.stderr.on('data', (data) => {
+//         console.error(`stderr: ${data}`);
+//     });
+
+//     await new Promise((resolve, reject) => {
+//         gptProcess.on('close', (code) => {
+//             if (code === 0) {
+//                 insertCodeAtCursor(generatedCode);
+//                 resolve();
+//             } else {
+//                 reject(new Error('GPT output script failed'));
+//             }
+//         });
+//     });
+// }
+
+// function deactivate() {}
+
+// module.exports = {
+//     activate,
+//     deactivate
+// };
+
+
