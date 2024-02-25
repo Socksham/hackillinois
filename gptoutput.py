@@ -1,4 +1,5 @@
 from openai import OpenAI
+import sys
 import os
 import re
 from dotenv import load_dotenv
@@ -8,10 +9,11 @@ load_dotenv()
 # Initialize the OpenAI client
 
 API_KEY = os.getenv("API_KEY")
-
+language_id = sys.argv[1] if len(sys.argv) > 1 else "plaintext"
+print(language_id)
 print(API_KEY)
 
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=API_KEY)
 
 def read_transcribed_text():
     # file_path = "./"
@@ -24,9 +26,9 @@ def read_transcribed_text():
 # Function to call the API and save the output to a file
 def call_api_and_save_output(user_input):
     completion = client.chat.completions.create(
-        model="gpt-3.5-turbo-0125",
+        model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "You are an advanced AI programming assistant designed to interpret spoken language descriptions of code and translate them into syntactically correct programming code. Your expertise includes identifying and transforming verbal descriptions of programming constructs, such as loops, conditionals, variable assignments, and arithmetic operations, into executable code in a variety of programming languages. You prioritize translating spoken language that describes code structures and logic, ensuring the generated code is accurate and functional. You also understand and process general spoken instructions about programming tasks, converting them into code. Return nothing but the code itself, output 'err' if there is no code-based language."},
+            {"role": "system", "content": f"You are an advanced AI programming assistant designed to interpret spoken language descriptions of code and translate them into syntactically correct programming code. Your expertise includes identifying and transforming verbal descriptions of programming constructs, such as loops, conditionals, variable assignments, and arithmetic operations, into executable code in a variety of programming languages. You prioritize translating spoken language that describes code structures and logic, ensuring the generated code is accurate and functional. You also understand and process general spoken instructions about programming tasks, converting them into code. Write in the language ${language_id}, or if it is in plaintext write in Python. Return nothing but the code itself, output 'err' if there is no code-based language."},
             {"role": "user", "content": user_input}
         ]
     )
