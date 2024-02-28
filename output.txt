@@ -1,11 +1,1 @@
-#include "functions.hpp"
-
-int MaxElement(int arr[], unsigned int size) {
-    int max_EL = arr[0];
-    for (unsigned int i = 0; i < size; ++i) {
-        if (max_EL < arr[i]) {
-            max_EL = arr[i];
-        }
-    }
-    return max_EL;
-}
+err

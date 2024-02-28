@@ -1,37 +1,54 @@
 {
   "name": "gpt4api",
-  "displayName": "hackillinois",
-  "description": "This is the README for your extension \"hackillinois\". After writing up a brief description, we recommend including the following sections.",
-  "version": "1.0.0",
+  "displayName": "WAV",
+  "icon": "WAVLogo.png",
+  "description": " Why type when you can talk? Speak your code into existence with WAV - the ultimate speech-to-code companion that turns your voice into viable code, effortlessly.",
+  "version": "1.0.2",
   "engines": {
     "vscode": "^1.86.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:yourExtension.setupPythonEnvironment"
+  ],
   "main": "./extension.js",
   "contributes": {
+    "configuration": {
+      "title": "WAV Settings",
+      "properties": {
+        "WAV.gptApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Enter your GPT API key here."
+        }
+      }
+    },
     "keybindings": [
       {
-          "command": "hackillinois.startRecording",
-          "key": "ctrl+shift+a",
-          "mac": "ctrl+shift+a"
+        "command": "WAV.startRecording",
+        "key": "ctrl+shift+a",
+        "mac": "ctrl+shift+a"
       },
       {
-        "command": "hackillinois.stopRecording",
+        "command": "WAV.stopRecording",
         "key": "ctrl+shift+s",
         "mac": "ctrl+shift+s"
-    }
-  ],
+      }
+    ],
     "commands": [
       {
-        "command": "hackillinois.startRecording",
+        "command": "WAV.startRecording",
         "title": "Start Audio Recording"
       },
       {
-        "command": "hackillinois.stopRecording",
+        "command": "WAV.stopRecording",
         "title": "Stop Audio Recording"
+      },
+      {
+        "command": "WAV.setupPythonEnvironment",
+        "title": "Setup Python Environment"
       }
     ]
   },
@@ -50,9 +67,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "body-parser": "^1.20.2",
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
+    "dotenv": "^16.4.5",
     "node-record-lpcm16": "^1.0.1",
     "openai": "^4.28.0"
   },
@@ -63,7 +78,8 @@
     "type": "git",
     "url": "git+https://github.com/Socksham/hackillinois.git"
   },
-  "author": "",
+  "publisher": "aummaneni",
+  "author": "aummaneni",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Socksham/hackillinois/issues"

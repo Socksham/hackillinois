@@ -1,1 +1,1 @@
- So we'll have an int called max underscore EL is equal to R of zero and we'll have a four loop under that and we'll initialize int i as an unsigned int and we'll set that equal to zero and we'll have i is less than size and i plus plus and if max underscore EL is less than R of i then max underscore EL is equal to R of i and outside of the four loop we should return return max EL.
+

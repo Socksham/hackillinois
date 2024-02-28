@@ -1,65 +1,31 @@
-# hackillinois README
+WAV leverages cutting-edge AI technologies to enhance the coding experience by allowing developers to generate code through voice commands. Utilizing OpenAI's Whisper for speech-to-text transcription and GPT models for intelligent code generation, WAV aims to streamline the development process, making it more efficient and accessible.
 
-This is the README for your extension "hackillinois". After writing up a brief description, we recommend including the following sections.
+Features
+WAV offers a unique set of features designed to improve productivity and reduce the barrier between ideation and implementation:
 
-## Features
+Voice-to-Code Translation: Convert spoken language into syntactically correct code snippets across various programming languages.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Context-Aware Suggestions: Generate code based on the context of the current file and the developer's spoken instructions.
 
-For example if there is an image subfolder under your extension project workspace:
+Seamless Integration: Works directly within VSCode, providing an intuitive and unobtrusive user experience.
 
-\!\[feature X\]\(images/feature-x.png\)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+Usage:
 
-## Requirements
+CTRL+SHIFT+A -> Start Recording
+CTRL+SHIFT+S -> Stop Recording, begin transcription process and generation. 
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Requirements
+To use WAV, ensure you have the following:
 
-## Extension Settings
+Tested on VSCode 1.86.2, should work ^1.86.0.
+Python 3.7 or higher, required for running the transcription and AI models.
+OpenAI API keys for accessing Whisper and GPT models.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+IMPORTANT:
+This version of WAV is in alpha and is still being tested under specific development environments. 
 
-For example:
 
-This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
 
-## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
